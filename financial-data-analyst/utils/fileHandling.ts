@@ -51,6 +51,7 @@ export const readFileAsPDFText = async (file: File): Promise<string> => {
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
         let fullText = "";
+        let fullTextLength = 0;
 
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
@@ -71,8 +72,9 @@ export const readFileAsPDFText = async (file: File): Promise<string> => {
           }
 
           fullText += text + "\n\n";
+          fullTextLength += text.length;
         }
-
+        console.log(`Document length: ${fullTextLength} characters`);
         document.body.removeChild(script);
         resolve(fullText.trim());
       } catch (error) {
